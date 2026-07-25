@@ -1,0 +1,45 @@
+learning
+
+so currently i am working on my project and i hit a wall.
+i send a request to leetcode.com and get hit by "this site requires a CSRF cookie when submitting forms." and "site required a http referer header".
+
+so both of these are two new learnings for me.
+i had seen something similar when using yt-dlp and i was asked to give my cookies to the tool.
+
+For the HTTP referer header, i have added a headers dict and paas it with 'requests.post()'
+The http referer header is to tell the current page where i am coming from. so when we click on a hyperlink, the request might include a Referer field which indicates the last page i was on (source : {wikipedia, developer.mozilla.org}).
+It can be used for analytics, logs, content personalization and security (on which i will write next).
+I would have hit this wall because leetcode wanted to know where i am coming from.
+Referer header is used by the server to understand if the request is coming from their own website or someone is directly hitting the api/endpoint for scraping purposes or whatever.
+
+
+CSRF or Cross-Site Request Forgery
+___________________________________
+A Cross-Site Request Forgery (CSRF) attack occurs when a malicious web site, email, blog, instant message, or program tricks an authenticated user's web browser into performing an unwanted action on a trusted site(owasp.org).
+An attacker can cause harm if they have your session cookies.
+CSRF is prevented by examining the header to see the source origin and target origin.
+
+
+
+HOW I GOT AROUND
+________________
+very simple, just add a headers dict while sending the request.
+headers = {
+    "Content-Type": "application/json",
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://leetcode.com",
+    "Cookie": "csrftoken=token; LEETCODE_SESSION=session",
+    "x-csrftoken": "token"
+}
+
+user_agents = {
+    "Chrome": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Firefox": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Edge": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+    "Safari": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
+}
+
+the initial version is ready to be pushed with only 3 functions as of now.
+future updates will/might include
+1. comparision of two accounts
+2. more information
